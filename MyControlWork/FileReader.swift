@@ -101,7 +101,7 @@ class SyntaxValidator{
                     if sendToHandleRow.count == substring.count{
                         errorRanges.append(NSRange(location: range.location + erroredRange.location, length: erroredRange.length))
                     } else {
-                        errorRanges.append(NSRange(location: range.location + 1 + erroredRange.location, length: erroredRange.length))
+                        errorRanges.append(NSRange(location: range.location + openSymbol.count + erroredRange.location, length: erroredRange.length))
                     }
                 }
             }
