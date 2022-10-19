@@ -28,17 +28,28 @@ struct ContentView: View {
                     Text("Введите текст")
                         .foregroundColor(Color(.placeholderText))
                 }
+                .font(.system(size: 16))
                 .frame(minHeight: 100)
                 .background{
                     RoundedRectangle(cornerRadius: 15)
                         .strokeBorder(style: .init(lineWidth: 1, lineCap: .round, lineJoin: .round))
                 }
                 .onChange(of: textFromFile) { newValue in
-                    let errorIndexes = stringValidator.validateStringRow(row: newValue, openSymbol: "(", closeSymbol: ")")
+                    var errorIndexes = stringValidator.validateStringRow(row: newValue, openSymbol: "(", closeSymbol: ")")
+                    let errorIndexes2 = stringValidator.validateStringRow(row: newValue, openSymbol: "{", closeSymbol: "}")
+                    let errorIndexes3 = stringValidator.validateStringRow(row: newValue, openSymbol: "begin", closeSymbol: "end")
+                    errorIndexes.append(contentsOf: errorIndexes2)
+                    errorIndexes.append(contentsOf: errorIndexes3)
                     if errorIndexes.count > 0{
                         let attribString = NSMutableAttributedString(string: newValue)
                         for errorIndex in errorIndexes {
-                            attribString.addAttribute(.foregroundColor, value: UIColor.red, range: errorIndex)
+                            let attributes: [NSAttributedString.Key: Any] = [
+                                .foregroundColor: UIColor.systemRed,
+                                .underlineColor: UIColor.systemRed,
+                                .underlineStyle: NSUnderlineStyle.single,
+                                .font: UIFont.boldSystemFont(ofSize: 18),
+                            ]
+                            attribString.addAttributes(attributes, range: errorIndex)
                         }
                         
                         syntaxStatusMessage = attribString

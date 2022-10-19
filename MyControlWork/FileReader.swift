@@ -28,7 +28,13 @@ class SyntaxValidator{
     func validateStringRow(row: String, openSymbol: String, closeSymbol: String) -> [NSRange]{
         var errorRanges: [NSRange] = []
         let rowRange = NSRange(location: 0, length: row.count)
-        guard let regexClosedSuccess = try? NSRegularExpression(pattern: "((\\\(openSymbol))+([\\s\\S]*)(\\\(closeSymbol))+)+|(((\\\(openSymbol))))+|((\\\(closeSymbol)+))") else {
+        var regex: NSRegularExpression?
+        // check if symbols is escaping
+        let openSymbolIsSpecial = openSymbol.range(of: ".*[^A-Za-z0-9].*", options: .regularExpression) != nil
+        let closeSymbolIsSpecial = closeSymbol.range(of: ".*[^A-Za-z0-9].*", options: .regularExpression) != nil
+        regex = try? NSRegularExpression(pattern: "((\(openSymbolIsSpecial ? "\\" + openSymbol : openSymbol))+([\\s\\S]*)(\(closeSymbolIsSpecial ? "\\" + closeSymbol : closeSymbol))+)+|(((\(openSymbolIsSpecial ? "\\" + openSymbol : openSymbol))))+|((\(closeSymbolIsSpecial ? "\\" + closeSymbol : closeSymbol)+))")
+        
+        guard let regexClosedSuccess = regex else {
             return errorRanges
         }
         
@@ -67,11 +73,11 @@ class SyntaxValidator{
             if (substring.count == openSymbolsId.count) || (substring.count == closeSymbolsId.count) {
                 for id in 0..<max(openSymbolsId.count, closeSymbolsId.count) {
                     if id < openSymbolsId.count{
-                        let range = NSRange(location: range.location + openSymbolsId[id], length: 1)
+                        let range = NSRange(location: range.location + openSymbolsId[id], length: openSymbol.count)
                         errorRanges.append(range)
                     }
                     if id < closeSymbolsId.count{
-                        let range = NSRange(location: range.location + closeSymbolsId[id], length: 1)
+                        let range = NSRange(location: range.location + closeSymbolsId[id], length: closeSymbol.count)
                         errorRanges.append(range)
                     }
                 }
@@ -82,10 +88,10 @@ class SyntaxValidator{
             var sendToHandleRow = substring
             if sendToHandleRow.count > 1{
                 if sendToHandleRow.hasPrefix(openSymbol){
-                    sendToHandleRow.removeFirst()
+                    sendToHandleRow.removeFirst(openSymbol.count)
                 }
                 if sendToHandleRow.hasSuffix(closeSymbol){
-                    sendToHandleRow.removeLast()
+                    sendToHandleRow.removeLast(closeSymbol.count)
                 }
             }
             
