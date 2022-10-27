@@ -1,35 +1,22 @@
 //
-//  FileReader.swift
+//  SyntaxValidator.swift
 //  MyControlWork
 //
 //  Created by Александр Шандыба on 18.10.2022.
 //
 
 import UIKit
-
-enum BracketSymbol: String{
-    case figureOpenTag = "{"
-    case figureCloseTag = "}"
-    
-    case undefined
-    init?(rawValue: String) {
-        switch rawValue{
-        case "{":
-            self = .figureOpenTag
-        case "}":
-            self = .figureCloseTag
-        default:
-            self = .undefined
-        }
-    }
+protocol SyntaxValidatorProtocol: AnyObject{
+    func validateStringRow(row: String, openSymbol: String, closeSymbol: String) -> [NSRange]
 }
 
-class SyntaxValidator{
+class SyntaxValidator: SyntaxValidatorProtocol{
     func validateStringRow(row: String, openSymbol: String, closeSymbol: String) -> [NSRange]{
         var errorRanges: [NSRange] = []
         let rowRange = NSRange(location: 0, length: row.count)
         var regex: NSRegularExpression?
-        // check if symbols is escaping
+        
+        // check if symbols is escaping (To needs using backslash)
         let openSymbolIsSpecial = openSymbol.range(of: ".*[^A-Za-z0-9].*", options: .regularExpression) != nil
         let closeSymbolIsSpecial = closeSymbol.range(of: ".*[^A-Za-z0-9].*", options: .regularExpression) != nil
         regex = try? NSRegularExpression(pattern: "((\(openSymbolIsSpecial ? "\\" + openSymbol : openSymbol))+([\\s\\S]*)(\(closeSymbolIsSpecial ? "\\" + closeSymbol : closeSymbol))+)+|(((\(openSymbolIsSpecial ? "\\" + openSymbol : openSymbol))))+|((\(closeSymbolIsSpecial ? "\\" + closeSymbol : closeSymbol)+))")
