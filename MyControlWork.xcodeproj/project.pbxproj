@@ -21,6 +21,9 @@
 		11B5AD262903389B006FD4E5 /* BookStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B5AD252903389B006FD4E5 /* BookStorage.swift */; };
 		11DB9BD82907408D000FD6EF /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DB9BD72907408D000FD6EF /* DateExtension.swift */; };
 		11DB9BDA2909FA37000FD6EF /* WorkGroup1Task4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DB9BD92909FA37000FD6EF /* WorkGroup1Task4.swift */; };
+		11DB9C2F2916D3AA000FD6EF /* BookCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DB9C2E2916D3AA000FD6EF /* BookCreator.swift */; };
+		11DB9C3129182CFF000FD6EF /* WorkGroup4Task12.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DB9C3029182CFF000FD6EF /* WorkGroup4Task12.swift */; };
+		11DB9C4629186B01000FD6EF /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DB9C4529186B01000FD6EF /* ArrayExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,6 +42,19 @@
 			remoteInfo = MyControlWork;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		11DB9C442918600F000FD6EF /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		11B5ACEA28FF0A24006FD4E5 /* MyControlWork.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyControlWork.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -59,6 +75,9 @@
 		11B5AD252903389B006FD4E5 /* BookStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookStorage.swift; sourceTree = "<group>"; };
 		11DB9BD72907408D000FD6EF /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		11DB9BD92909FA37000FD6EF /* WorkGroup1Task4.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkGroup1Task4.swift; sourceTree = "<group>"; };
+		11DB9C2E2916D3AA000FD6EF /* BookCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookCreator.swift; sourceTree = "<group>"; };
+		11DB9C3029182CFF000FD6EF /* WorkGroup4Task12.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkGroup4Task12.swift; sourceTree = "<group>"; };
+		11DB9C4529186B01000FD6EF /* ArrayExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +108,7 @@
 		11B5ACE128FF0A24006FD4E5 = {
 			isa = PBXGroup;
 			children = (
+				11DB9C4529186B01000FD6EF /* ArrayExtension.swift */,
 				11B5AD1E2902EFA5006FD4E5 /* MenuView */,
 				11B5ACEC28FF0A24006FD4E5 /* MyControlWork */,
 				11B5ACFE28FF0A25006FD4E5 /* MyControlWorkTests */,
@@ -171,6 +191,7 @@
 			children = (
 				11B5AD1A2902E2D3006FD4E5 /* WorkGroup2Task4View.swift */,
 				11B5AD252903389B006FD4E5 /* BookStorage.swift */,
+				11DB9C2E2916D3AA000FD6EF /* BookCreator.swift */,
 			);
 			path = WorkGroup2;
 			sourceTree = "<group>";
@@ -186,6 +207,7 @@
 		11B5AD2429033760006FD4E5 /* WorkGroup4 */ = {
 			isa = PBXGroup;
 			children = (
+				11DB9C3029182CFF000FD6EF /* WorkGroup4Task12.swift */,
 			);
 			path = WorkGroup4;
 			sourceTree = "<group>";
@@ -208,6 +230,7 @@
 				11B5ACE628FF0A24006FD4E5 /* Sources */,
 				11B5ACE728FF0A24006FD4E5 /* Frameworks */,
 				11B5ACE828FF0A24006FD4E5 /* Resources */,
+				11DB9C442918600F000FD6EF /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -329,11 +352,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				11B5AD222903180C006FD4E5 /* FileReader.swift in Sources */,
+				11DB9C3129182CFF000FD6EF /* WorkGroup4Task12.swift in Sources */,
 				11DB9BD82907408D000FD6EF /* DateExtension.swift in Sources */,
+				11DB9C4629186B01000FD6EF /* ArrayExtension.swift in Sources */,
 				11B5AD1D2902E323006FD4E5 /* MenuView.swift in Sources */,
 				11B5AD1B2902E2D3006FD4E5 /* WorkGroup2Task4View.swift in Sources */,
 				11B5AD1928FF0B15006FD4E5 /* SyntaxValidator.swift in Sources */,
 				11B5ACF028FF0A24006FD4E5 /* WorkGroup3Task4View.swift in Sources */,
+				11DB9C2F2916D3AA000FD6EF /* BookCreator.swift in Sources */,
 				11B5ACEE28FF0A24006FD4E5 /* MyControlWorkApp.swift in Sources */,
 				11DB9BDA2909FA37000FD6EF /* WorkGroup1Task4.swift in Sources */,
 				11B5AD262903389B006FD4E5 /* BookStorage.swift in Sources */,
@@ -503,8 +529,8 @@
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
@@ -541,8 +567,8 @@
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";

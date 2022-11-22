@@ -48,12 +48,14 @@ struct WorkGroup3Task4View: View {
                         .strokeBorder(style: .init(lineWidth: 1, lineCap: .round, lineJoin: .round))
                 }
                 .onChange(of: textFromFile) { newValue in
+                    //создаем несколько обьектов для проверки открытости и закрытости указанных тегов
                     var errorIndexes = stringValidator.validateStringRow(row: newValue, openSymbol: "(", closeSymbol: ")")
                     let errorIndexes2 = stringValidator.validateStringRow(row: newValue, openSymbol: "{", closeSymbol: "}")
                     let errorIndexes3 = stringValidator.validateStringRow(row: newValue, openSymbol: "<h1>", closeSymbol: "</h1>")
                     errorIndexes.append(contentsOf: errorIndexes2)
                     errorIndexes.append(contentsOf: errorIndexes3)
                     if errorIndexes.count > 0{
+                        // применяем форматирование для неправильных тегов
                         let attribString = NSMutableAttributedString(string: newValue)
                         for errorIndex in errorIndexes {
                             let attributes: [NSAttributedString.Key: Any] = [
@@ -76,7 +78,7 @@ struct WorkGroup3Task4View: View {
         }.fileImporter(isPresented: $isSelectingFile, allowedContentTypes: [.text,.plainText,.delimitedText,.utf8PlainText,.utf8TabSeparatedText], onCompletion: { result in
             switch result{
             case .success(let url):
-                
+                // читаем данные из файла и переводим в строку с кодировкой utf-8
                 FileReader.readFile(url: url) { readedData in
                     if let readedData = readedData{
                         guard let readedString = String(data: readedData, encoding: .utf8) else {

@@ -26,14 +26,19 @@ struct WorkGroup1Task4: View {
                     .strokeBorder(style: .init(lineWidth: 1, lineCap: .round, lineJoin: .round))
             }
             .onChange(of: text) { newValue in
+                // разделяем строку по отдельным словам разделенными пробелами
                 let words = newValue.components(separatedBy: .whitespaces)
-                let wordsResulted = words.map { word in
+                // преобразуем массив строк в массив строк, но уже отформатированных по условиям задачи
+                var wordsResulted = words.map { word in
+                    // преобразуем слово в нижний регистр
+                    let word = word.lowercased()
                     if word.hasSuffix("."){
                         return word
                     }
                     guard let firstChar = word.first else {
                         return word
                     }
+                    // удаляем все вхождения первого символа и добавлем символ в начало
                     var wordCopy = word
                     wordCopy.removeAll(where: {
                         $0 == firstChar
@@ -41,6 +46,11 @@ struct WorkGroup1Task4: View {
                     wordCopy.insert(firstChar, at: wordCopy.startIndex)
                     return wordCopy
                 }
+                // делаем первую букву первого слово в верхний регистр
+                if wordsResulted.count > 0{
+                    wordsResulted[0] = wordsResulted.first!.capitalized
+                }
+                // соединяем массив строк в одну строку с помощью пробела
                 resultText = wordsResulted.joined(separator: " ")
             }
             Divider()

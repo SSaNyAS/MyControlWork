@@ -14,7 +14,7 @@ struct MenuView: View {
                 navigationLinkSetupped(title: "1. Строковый тип", destination: WorkGroup1Task4())
                 navigationLinkSetupped(title: "2. Типизированные типы", destination: WorkGroup2Task4View())
                 navigationLinkSetupped(title: "3. Текстовые файлы", destination: WorkGroup3Task4View())
-                navigationLinkSetupped(title: "4. Модульное программирование", destination: EmptyView())
+                navigationLinkSetupped(title: "4. Модульное программирование", destination: WorkGroup4Task12())
                 navigationLinkSetupped(title: "5. Динамические структуры данных", destination: EmptyView())
                 navigationLinkSetupped(title: "6. ASCIIZ - строки (строки с нулевым окончанием)", destination: EmptyView())
                 navigationLinkSetupped(title: "8?. Рекурсивные алгоритмы", destination: EmptyView())
@@ -23,7 +23,7 @@ struct MenuView: View {
         }
     }
     
-    
+    // компонент со стилями
     func navigationLinkSetupped(title:String ,destination: some View) -> some View {
         return NavigationLink(destination: destination) {
             Text(title)

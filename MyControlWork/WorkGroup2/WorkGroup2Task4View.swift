@@ -6,26 +6,33 @@
 //
 
 import SwiftUI
+import Foundation
 import UniformTypeIdentifiers
 
 struct WorkGroup2Task4View: View {
-    var bookStorage: BookStorageProtocol & SaveReadFileProtocol = BookMemoryStorage()
+    typealias booksStorageIOFileSupport = BookStorageProtocol & SaveReadFileProtocol
+    @StateObject var bookCreator: BookCreator = BookCreator()
+    var bookStorage: booksStorageIOFileSupport = BookMemoryStorage()
     @State var books: [Book] = []
     @State var selectedTaskId: Int = 0
     @State var tasks: [String] = ["Все книги","Задание a","Задание b"]
     @State var isSelectingYear: Bool = false
+    
     @State var selectedYear:String = ""
     @State var isSelectingFileToRead: Bool = false
     @State var isSelectingFileToWrite: Bool = false
     @State var createdFileUrl: URL?
+    @State var createdBook: Book?
     @State var file: File = .init(data: Data())
+    
     var body: some View {
         ScrollView{
             Text("Дан файл КАТ, содержащий сведения о книгах:\n1)фамилия автора\n2)название\n3)год издания\n4)цена книги\na)распечатать записи с заданным годом издания, упорядоченные по алфавиту, а если таковых нет, то выдать соответствующее сообщение\nб)Отсортировать записи в порядке возрастания цены книги")
                 .padding(.horizontal,0)
             
             if createdFileUrl != nil {
-                Text(createdFileUrl!.relativeString)
+                Text("Файл создан по пути:\n" + createdFileUrl!.relativeString)
+                    .padding(10)
             }
 
             HStack(spacing: 20){
@@ -33,6 +40,17 @@ struct WorkGroup2Task4View: View {
                     self.isSelectingFileToRead = true
                 } label: {
                     Text("Чтение файла")
+                        .foregroundColor(.white)
+                        .padding(10)
+                }
+                .background{
+                    RoundedRectangle(cornerRadius: 15)
+                        .fill(Color.accentColor)
+                }
+                Button {
+                    bookCreator.isCreateBook = true
+                } label: {
+                    Text("Добавить книгу")
                         .foregroundColor(.white)
                         .padding(10)
                 }
@@ -82,13 +100,12 @@ struct WorkGroup2Task4View: View {
             .animation(.spring(), value: selectedTaskId)
             .pickerStyle(.segmented)
             .onChange(of: selectedTaskId, perform: { newValue in
-                //self.isSelectingYear = selectedTaskId == 1
                 getBooks()
             })
             
             List(books){ book in
                 HStack{
-                    Text("#\(books.firstIndex(where: {$0.id == book.id}) ?? 1)")
+                    Text("#\((books.firstIndex(where: {$0.id == book.id}) ?? 1) + 1)")
                         .font(.title2)
                         .foregroundColor(Color(.placeholderText))
                     Image(systemName: "book")
@@ -137,24 +154,57 @@ struct WorkGroup2Task4View: View {
                 getBooks()
             }
         }
+        .alert("Добавление книги", isPresented: $bookCreator.isCreateBook) {
+            VStack{
+                textfieldWithPlaceholder(placeHolder: "Наименование книги", text: $bookCreator.name)
+                textfieldWithPlaceholder(placeHolder: "Автор", text: $bookCreator.author)
+                    .textContentType(.organizationName)
+                TextField(value: $bookCreator.releaseDate, formatter: {
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "dd.MM.yyyy"
+                    return dateFormatter
+                }()) {
+                    Text("Дата выпуска")
+                        .foregroundColor(.init(uiColor: .placeholderText))
+                }
+                .textContentType(.dateTime)
+                .keyboardType(.numbersAndPunctuation)
+                
+                TextField(value: $bookCreator.price, formatter: {
+                    let formatter = NumberFormatter()
+                    formatter.minimum = 0
+                    formatter.textAttributesForNegativeValues = [NSAttributedString.Key.foregroundColor.rawValue: UIColor.red]
+                    formatter.notANumberSymbol = "Укажите число"
+                    formatter.zeroSymbol = ""
+                    return formatter
+                }()) {
+                    Text("Цена")
+                        .foregroundColor(.init(uiColor: .placeholderText))
+                }
+                .keyboardType(.numberPad)
+                Button("Добавить") {
+                    bookCreator.addBookToStorage(bookStorage: bookStorage)
+                    getBooks()
+                }
+                
+                Button {
+                    
+                } label: {
+                    Text("Отмена")
+                        .fontWeight(.bold)
+                }
+            }
+        }
+        .alert(item: $bookCreator.bookCreationError, content: { item in
+            Alert(
+                title: Text("Ошибка создания"),
+                message: Text(item.errorDescription ?? "")
+            )
+        })
         .fileImporter(isPresented: $isSelectingFileToRead, allowedContentTypes: [.text,.utf8PlainText,.plainText,.utf8TabSeparatedText]) { result in
             switch result {
             case .success(let url):
-                DispatchQueue.global(qos: .background).async {
-                    guard let data = try? Data(contentsOf: url) else {
-                        print("error to get data from file")
-                        return
-                    }
-                    bookStorage.readFromData(data: data) { isSuccess in
-                        if isSuccess{
-                            print("success fill books from file")
-                            getBooks()
-                        } else {
-                            print("error to encode data from file")
-                        }
-                    }
-                }
-                
+                importBooksFromFile(url: url)
             case .failure(let error):
                 print(error.localizedDescription)
             }
@@ -168,9 +218,16 @@ struct WorkGroup2Task4View: View {
                 print(error.localizedDescription)
             }
         }
-        
+        .scrollIndicators(.hidden)
     }
     
+    func textfieldWithPlaceholder(placeHolder: String, text: Binding<String>) -> some View{
+        TextField(text: text, axis: .vertical){
+            Text(placeHolder)
+                .foregroundColor(.init(uiColor: .placeholderText))
+        }
+    }
+    // получаем книги по условиям выбранного задания
     func getBooks(){
         let books = bookStorage.getAllBooks()
         self.books = []
@@ -178,6 +235,7 @@ struct WorkGroup2Task4View: View {
         case 0:
             self.books = books
         case 1:
+            // проверяем чтобы год был в виде числа
             guard let selectedYear = Int(selectedYear) else {
                 return
             }
@@ -186,15 +244,34 @@ struct WorkGroup2Task4View: View {
             guard let date = dateToSelectedYear else {
                 return
             }
+            // получаем книги с указанным годом и сортируем по алфавиту
             self.books = bookStorage.getBooksByReleaseYear(date: date).sorted(by: { book1, book2 in
                 book1.name < book2.name
             })
         case 2:
+            // сортируем книги по цене
             self.books = books.sorted(by: {
                 $0.price < $1.price
             })
         default:
             break
+        }
+    }
+    // в фоновом потоке асинхронно считываем данные с файла и пытаемся получить книги, если удалось то обновляем интерфейс
+    func importBooksFromFile(url: URL){
+        DispatchQueue.global(qos: .background).async {
+            guard let data = try? Data(contentsOf: url) else {
+                print("error to get data from file")
+                return
+            }
+            bookStorage.readFromData(data: data) { isSuccess in
+                if isSuccess{
+                    print("success fill books from file")
+                    getBooks()
+                } else {
+                    print("error to encode data from file")
+                }
+            }
         }
     }
     
@@ -203,6 +280,7 @@ struct WorkGroup2Task4View: View {
         self.file = file
         self.isSelectingFileToWrite = true
     }
+    
     class File: FileDocument{
         static var readableContentTypes: [UTType] = [.json]
         static var writableContentTypes: [UTType] = [.json]
@@ -211,7 +289,7 @@ struct WorkGroup2Task4View: View {
         required init(configuration: ReadConfiguration) throws {
             fatalError("this file not readable")
         }
-        
+        // для выходного файла ставим имя по умолчанию в виде BooksData_дата с временем.json
         init(data: Data){
             self.fileWrapper = .init(regularFileWithContents: data)
             self.fileWrapper?.preferredFilename = "BooksData_\(Date().shortFormatWithTime()).json"

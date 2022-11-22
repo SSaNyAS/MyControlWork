@@ -7,6 +7,7 @@
 
 import Foundation
 class FileReader{
+    // просто считываем асинхронно в фоновом потоке данные с файла и возвращаем в замыкание
     static func readFile(url: URL, completion: @escaping (_ readedData: Data?) -> Void){
         DispatchQueue.global(qos: .background).async {
             guard let reader = try? FileHandle(forReadingFrom: url) else {
