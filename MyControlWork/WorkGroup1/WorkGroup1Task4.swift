@@ -27,14 +27,18 @@ struct WorkGroup1Task4: View {
             }
             .onChange(of: text) { newValue in
                 // разделяем строку по отдельным словам разделенными пробелами
-                let words = newValue.components(separatedBy: .whitespaces)
+                var words = newValue.components(separatedBy: .whitespaces)
+                // удаляем из строки все слова идентичные последнему
+                let lastWord = words.last?.lowercased()
+                words.removeAll(where: {$0.lowercased() == lastWord})
                 // преобразуем массив строк в массив строк, но уже отформатированных по условиям задачи
                 var wordsResulted = words.map { word in
                     // преобразуем слово в нижний регистр
-                    let word = word.lowercased()
+                    let word = word.trimmingCharacters(in: .whitespaces).lowercased()
                     if word.hasSuffix("."){
                         return word
                     }
+
                     guard let firstChar = word.first else {
                         return word
                     }
@@ -51,6 +55,7 @@ struct WorkGroup1Task4: View {
                     wordsResulted[0] = wordsResulted.first!.capitalized
                 }
                 // соединяем массив строк в одну строку с помощью пробела
+                let wordsString = wordsResulted.joined(separator: " ")
                 resultText = wordsResulted.joined(separator: " ")
             }
             Divider()
