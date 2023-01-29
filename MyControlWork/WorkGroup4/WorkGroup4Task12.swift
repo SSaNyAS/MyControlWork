@@ -94,7 +94,7 @@ struct WorkGroup4Task12: View {
                     .font(.title2)
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: .infinity, maxHeight: 100)
-                    .background(Color.white)
+                    .background(.background)
             }
         }
         
