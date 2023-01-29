@@ -29,12 +29,15 @@ struct WorkGroup1Task4: View {
                 // разделяем строку по отдельным словам разделенными пробелами
                 var words = newValue.components(separatedBy: .whitespaces)
                 // удаляем из строки все слова идентичные последнему
-                let lastWord = words.last?.lowercased()
-                words.removeAll(where: {$0.lowercased() == lastWord})
+                if let lastWord = words.last {
+                    let lowercasedWord = lastWord.lowercased()
+                    words.removeAll(where: {$0.lowercased() == lowercasedWord})
+                    words.append(lastWord)
+                }
                 // преобразуем массив строк в массив строк, но уже отформатированных по условиям задачи
                 var wordsResulted = words.map { word in
                     // преобразуем слово в нижний регистр
-                    let word = word.trimmingCharacters(in: .whitespaces).lowercased()
+                    let word = word.trimmingCharacters(in: .whitespaces)
                     if word.hasSuffix("."){
                         return word
                     }
@@ -44,8 +47,9 @@ struct WorkGroup1Task4: View {
                     }
                     // удаляем все вхождения первого символа и добавлем символ в начало
                     var wordCopy = word
+                    let firstCharLowercased = firstChar.lowercased()
                     wordCopy.removeAll(where: {
-                        $0 == firstChar
+                        $0.lowercased() == firstCharLowercased
                     })
                     wordCopy.insert(firstChar, at: wordCopy.startIndex)
                     return wordCopy
@@ -55,7 +59,7 @@ struct WorkGroup1Task4: View {
                     wordsResulted[0] = wordsResulted.first!.capitalized
                 }
                 // соединяем массив строк в одну строку с помощью пробела
-                let wordsString = wordsResulted.joined(separator: " ")
+
                 resultText = wordsResulted.joined(separator: " ")
             }
             Divider()
